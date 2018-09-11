@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+
 #windows is finicky, having said that
 #if you get an "nodemcu_uploader.exceptions.DeviceNotFoundException: Device not found or wrong port"
 #just plug, unplug the usb port it will eventually work(tm)
@@ -24,4 +25,3 @@ else
   echo "restarted node"
   nodemcu-uploader --port /dev/ttyUSB0 terminal
 fi
-
