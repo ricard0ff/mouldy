@@ -8,8 +8,8 @@ function makepromlines(prefix, name, source)
 end
 
 function metrics()
-    local t, p, h, qnh = bme280.read(altitude)
-    local d = bme280.dewpoint(h, t)
+    local t, p, h, g, qnh = bme680.read(altitude)
+    local d = bme680.dewpoint(h, t)
     -- this table contains the metric names and sources.
     local metricspecs = {
       "temperature_celsius", t/100,
@@ -17,6 +17,7 @@ function metrics()
       "airpressure_sealevel_hectopascal", qnh/1000,
       "humidity_percent", h/1000,
       "dewpoint_celsius", d/100,
+      "gas_resistance", g,
       }
     local metrics = {}
     for i = 1, #metricspecs, 2 do
@@ -39,7 +40,9 @@ i2c.setup(0, sda, scl, i2c.SLOW) -- call i2c.setup() only once
 -- - 1x oversampling
 -- - sleep mode (we enable forced mode when taking measurements)
 -- - IIR filter off
-bme280.setup(1, 1, 1, 0, nil, 0)
+-- bme280.setup(1, 1, 1, 0, nil, 0)
+
+bme680.setup()
 
 srv = net.createServer(net.TCP, 20) -- 20s timeout
 
@@ -47,7 +50,8 @@ if srv then
   srv:listen(80, function(conn)
     conn:on("receive", function(conn, data)
       print("< "  .. data)
-      bme280.startreadout(0, function ()
+-- there needs to be a delay according to the docs, setting it at 150
+      bme680.startreadout(150, function ()
         conn:send(response())
         conn:close()
       end)
