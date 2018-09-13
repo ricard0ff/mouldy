@@ -1,5 +1,7 @@
 local sda = 6
 local scl = 5
+local sensor_pin = 0; 
+
 
 function makepromlines(prefix, name, source)
   local buffer = {"# TYPE ", prefix, name, " gauge\n", prefix, name, " ", source, "\n"}
@@ -10,6 +12,7 @@ end
 function metrics()
     local t, p, h, g, qnh = bme680.read(altitude)
     local d = bme680.dewpoint(h, t)
+    local moisture = ( 100.00 - ( (adc.read(sensor_pin)/1023.00) * 100.00 ) )
     -- this table contains the metric names and sources.
     local metricspecs = {
       "temperature_celsius", t/100,
@@ -18,6 +21,7 @@ function metrics()
       "humidity_percent", h/1000,
       "dewpoint_celsius", d/100,
       "gas_resistance", g,
+      "moisture_percentage",moisture,
       }
     local metrics = {}
     for i = 1, #metricspecs, 2 do
