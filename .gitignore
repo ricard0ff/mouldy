@@ -1,4 +1,5 @@
 *.swp
+*.bin
 location.lua
 location_nicolai.lua
 location_duana.lua
