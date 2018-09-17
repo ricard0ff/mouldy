@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-#windows is finicky, having said that
+#windows is finicky!
 #if you get an "nodemcu_uploader.exceptions.DeviceNotFoundException: Device not found or wrong port"
-#just plug, unplug the usb port it will eventually work(tm)
+#Ive noticed that flashing with esptool makes the error go away, work(tm)
 if grep -q Microsoft /proc/version; then
   echo "Ubuntu on Windows"
   nodemcu-uploader.exe --port COM5 file remove init.lua 
