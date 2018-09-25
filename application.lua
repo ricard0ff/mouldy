@@ -12,7 +12,7 @@ end
 function metrics()
     local t, p, h, g, qnh = bme680.read(altitude)
     local d = bme680.dewpoint(h, t)
-    local moisture = ( 100.00 - ( (adc.read(sensor_pin)/1023.00) * 100.00 ) )
+    local moisture = ( ( (adc.read(sensor_pin)/1023.00) * 100.00 ) )
     -- this table contains the metric names and sources.
     local metricspecs = {
       "temperature_celsius", t/100,
